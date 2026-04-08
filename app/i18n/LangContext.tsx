@@ -1,11 +1,14 @@
 'use client'
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { t, Lang } from './translations'
+import { t } from './translations'
+
+type Lang = 'uk' | 'en'
+type Translations = typeof t.uk
 
 const LangContext = createContext<{
   lang: Lang
   setLang: (l: Lang) => void
-  T: typeof t['uk']
+  T: Translations
 }>({ lang: 'uk', setLang: () => {}, T: t.uk })
 
 export function LangProvider({ children }: { children: ReactNode }) {
@@ -21,8 +24,10 @@ export function LangProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('gitlog_lang', l)
   }
 
+  const T = t[lang] as Translations
+
   return (
-    <LangContext.Provider value={{ lang, setLang, T: t[lang] }}>
+    <LangContext.Provider value={{ lang, setLang, T }}>
       {children}
     </LangContext.Provider>
   )
